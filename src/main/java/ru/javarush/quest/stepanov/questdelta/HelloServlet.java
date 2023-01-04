@@ -1,4 +1,4 @@
-package ua.com.javarush.quest.khmelov.questdelta;
+package ru.javarush.quest.stepanov.questdelta;
 
 import java.io.*;
 

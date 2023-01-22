@@ -29,6 +29,8 @@
             <c:choose>
                 <c:when test="${sessionScope.user.role!='VISITOR'}">
                     <div class="col-md-3 text-end">
+                        Current user: ${sessionScope.user.login}
+
                         <a href="logout">
                             <button type="button" class="btn btn-outline-primary me-2">Log Out</button>
                         </a>

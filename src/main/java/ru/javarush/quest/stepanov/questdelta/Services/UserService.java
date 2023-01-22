@@ -32,13 +32,12 @@ public enum UserService {
         return userRepository.getById(id);
     }
 
-    public Optional<User> getUser(String login, String password) {
+    public Optional<User> getUserByLogin(String login) {
 
         // прописать сценарий ошибок, когда оба поля пустые
 
         User searchUser = User.with()
                 .login(login)
-                .password(password)
                 .build();
 
         return userRepository.find(searchUser).findFirst();

@@ -32,9 +32,14 @@
         <label class="col-md-4 control-label" for="EmailInput">Email</label>
         <div class="col-md-4">
           <input id="EmailInput" name="email" type="text" placeholder="Type In Email" class="form-control input-md" required="">
-
         </div>
       </div>
+
+      <c:choose>
+        <c:when test="${!empty requestScope.message}">
+          <p style="color:red">${requestScope.message}</p>
+        </c:when>
+      </c:choose>
 
       <!-- Button -->
       <div class="form-group">

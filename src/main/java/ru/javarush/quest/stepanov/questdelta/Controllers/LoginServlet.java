@@ -28,14 +28,13 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         // прописать сценарий ошибок, когда оба поля пустые
-        Optional<User> user = userService.getUser(req.getParameter("login"), req.getParameter("password"));
+        Optional<User> user = userService.getUserByLogin(req.getParameter("login"));
         if (user.isPresent()) {
             req.getSession().setAttribute("user", user.get());
             Jsp.redirect(resp, "/");
         } else {
             req.setAttribute("message", MessageContainer.USER_NOT_FOUND);
             Jsp.forward(req, resp, "login");
-            // Jsp.redirect(resp, "login");
         }
     }
 }

@@ -41,8 +41,6 @@ public enum GameService{
 
     private Game createNewGame(Long questId, Long userId){
 
-        System.out.println("creating a new one");
-
         // get rid of condition
         Quest quest = questService.getById(questId).isPresent() ? questService.getById(questId).get() : null;
         User user = userService.getById(userId).isPresent() ? userService.getById(userId).get() : null;

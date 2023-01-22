@@ -1,4 +1,4 @@
-package ru.javarush.quest.stepanov.questdelta.Controllers;
+package ru.javarush.quest.stepanov.questdelta.Controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

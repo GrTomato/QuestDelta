@@ -61,13 +61,15 @@ public class RepositoryLoader {
 
         Question firstQuestion = Question.with()
                 .text("You wake up in an unknown room. The head hurts and vision is blurry. Suddenly you find a glass of water. What would you do?")
-                .answers(firstQuestionAnswers)
+                // .answers(firstQuestionAnswers)
                 .build();
+        firstQuestionAnswers.forEach(firstQuestion.getAnswers()::add);
 
         Question secondQuestion = Question.with()
                 .text("You drunk the water. It was not poisoned. You feel better. The door in front of you opens and a zombie walks in. What would you do?")
-                .answers(new ArrayList<Answer>())
+                // .answers(new ArrayList<Answer>())
                 .build();
+
         Question thirdQuestion = Question.with()
                 .text("You did not drink the water. You died.")
                 .build();
@@ -80,7 +82,7 @@ public class RepositoryLoader {
         questionRepository.create(thirdQuestion);
 
 
-        User dummyUser = userRepository.getById(jamesUser.getId()).get();
+        User dummyUser = userRepository.getById(jamesUser.getId());
         questRepository.create(
                 Quest.with()
                         .name("Haunted House")

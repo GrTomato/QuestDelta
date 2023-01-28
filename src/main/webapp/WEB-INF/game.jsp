@@ -22,7 +22,7 @@
                                 <c:forEach var="answer" items="${requestScope.game.lastRedirectedQuestion.answers}">
                                     <div class="radio">
                                         <label for="answers-${answer.id}">
-                                            <input type="radio" name="selectedAnswerNextQuestion" id="answers-${answer.id}" value="${answer.nextQuestion.id}">
+                                            <input type="radio" name="question_id" id="answers-${answer.id}" value="${answer.nextQuestion.id}">
                                                 ${answer.text}
                                         </label>
                                     </div>

@@ -1,10 +1,14 @@
 package ru.javarush.quest.stepanov.questdelta.service;
 
+import ru.javarush.quest.stepanov.questdelta.dto.QuestionDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.Question;
+import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
+import ru.javarush.quest.stepanov.questdelta.mapper.Mapper;
 import ru.javarush.quest.stepanov.questdelta.repository.QuestionRepository;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public enum QuestionService {
     INSTANCE;
@@ -23,12 +27,24 @@ public enum QuestionService {
         questionRepository.delete(entity);
     }
 
-    public Collection<Question> getAll(){
+    public Collection<QuestionDTO> getAll(){
         return questionRepository
                 .getAll()
+                .map(Mapper.question::getDTO)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .toList();
     }
-    public Optional<Question> getById(long id){
-        return questionRepository.getById(id);
+    public Optional<QuestionDTO> getById(long id){
+        Question questionEntity = questionRepository.getById(id);
+        return Mapper.question.getDTO(questionEntity);
+    }
+
+    public Optional<QuestionDTO> getQuestion(FormData formData){
+        Question parsedQuestion = Mapper.question.parse(formData);
+        Optional<Question> question = questionRepository.find(parsedQuestion).findFirst();
+        return question.isPresent()
+                ? Mapper.question.getDTO(question.get())
+                : Optional.empty();
     }
 }

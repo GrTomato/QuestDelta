@@ -1,6 +1,5 @@
 package ru.javarush.quest.stepanov.questdelta.repository;
 
-import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface Repository<T> {
@@ -9,7 +8,7 @@ public interface Repository<T> {
 
     Stream<T> find(T entity);
 
-    Optional<T> getById(long id);
+    T getById(long id);
 
     void create(T entity);
     void update(T entity);

@@ -5,9 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.javarush.quest.stepanov.questdelta.entity.User;
-import ru.javarush.quest.stepanov.questdelta.entity.UserRole;
-import ru.javarush.quest.stepanov.questdelta.repository.UserRepository;
+import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
+import ru.javarush.quest.stepanov.questdelta.exception.NoUserFoundException;
+import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
 import ru.javarush.quest.stepanov.questdelta.service.UserService;
 import ru.javarush.quest.stepanov.questdelta.util.Jsp;
 import ru.javarush.quest.stepanov.questdelta.util.MessageContainer;
@@ -20,7 +20,6 @@ import java.util.Optional;
 public class RegisterServlet extends HttpServlet {
 
     private final UserService userService = UserService.INSTANCE;
-    private final UserRepository userRepository = UserRepository.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,21 +29,24 @@ public class RegisterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        Optional<User> user = userService.getUserByLogin(req.getParameter("login"));
+        FormData formData = FormData.of(req);
 
-        if (user.isPresent()){
-            req.setAttribute("message", MessageContainer.USER_ALREADY_REGISTERED);
-            Jsp.forward(req, resp, "register");
-        } else {
-            User newUser = User.with()
-                    .login(req.getParameter("login"))
-                    .password(req.getParameter("password"))
-                    .email(req.getParameter("email"))
-                    .role(UserRole.PLAYER)
-                    .build();
-            userService.create(newUser);
+        try{
+            Optional<UserDTO> foundUser = userService.getUser(formData);
+            if (foundUser.isPresent()){
+                req.setAttribute("message", MessageContainer.USER_ALREADY_REGISTERED);
+                Jsp.forward(req, resp, "register");
+            } else {
+                throw new NoUserFoundException();
+            }
+        } catch (NoUserFoundException e){
+            Optional<UserDTO> userDTO = userService.create(formData);
+            if (userDTO.isPresent()){
+                Jsp.redirect(resp, "/");
+            } else {
+                throw new RuntimeException("Something happened while creating new user. Please, debug.");
+            }
         }
 
-        Jsp.redirect(resp, "/");
     }
 }

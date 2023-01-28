@@ -5,11 +5,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.javarush.quest.stepanov.questdelta.entity.Game;
-import ru.javarush.quest.stepanov.questdelta.entity.Question;
-import ru.javarush.quest.stepanov.questdelta.entity.User;
+import ru.javarush.quest.stepanov.questdelta.dto.GameDTO;
+import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
+import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
 import ru.javarush.quest.stepanov.questdelta.service.GameService;
-import ru.javarush.quest.stepanov.questdelta.service.QuestionService;
+import ru.javarush.quest.stepanov.questdelta.service.UserService;
 import ru.javarush.quest.stepanov.questdelta.util.Jsp;
 import ru.javarush.quest.stepanov.questdelta.util.URLContainer;
 
@@ -20,49 +20,40 @@ import java.util.Optional;
 public class GameServlet extends HttpServlet {
 
     private final GameService gameService = GameService.INSTANCE;
-    private final QuestionService questionService = QuestionService.INSTANCE;
+    private final UserService userService = UserService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String questId = req.getParameter("quest_id");
-        Optional<String> instruction = Optional.ofNullable(req.getParameter("instruct"));
+        FormData formData = FormData.of(req);
 
-        User currentUser = (User) req.getSession().getAttribute("user");
-        Game game = gameService.getGame(Long.parseLong(questId), currentUser.getId());
+        UserDTO currentUser = userService.getUser(req.getSession());
+        Optional<GameDTO> game = gameService.getGame(
+                formData,
+                currentUser.getId()
+        );
 
-        if (instruction.isPresent()){
-            if (instruction.get().equalsIgnoreCase("restart")) gameService.restartGame(game);
+        if (game.isPresent()){
+            req.setAttribute("game", game.get());
+            Jsp.forward(req, resp, "game");
+        } else {
+            throw new RuntimeException("No game DTO was found.");
         }
-
-
-        req.setAttribute("game", game);
-        Jsp.forward(req, resp, "game");
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String gameId = req.getParameter("id");
-        String selectedAnswerNextQuestion = req.getParameter("selectedAnswerNextQuestion");
+        // добавить постоянную проверку в game service, что есть такая пара Квест-Ответ в рамках текущей игры
+        FormData formData = FormData.of(req);
+        Optional<GameDTO> gameDTO = gameService.updateGameProgress(formData);
 
-        Optional<Question> nextQuestion = questionService.getById(Long.parseLong(selectedAnswerNextQuestion));
-        if (nextQuestion.isPresent()){
-            Optional<Game> currentGame = gameService.getById(Long.parseLong(gameId));
-            if (currentGame.isPresent()){
-                currentGame.get().setLastRedirectedQuestion(nextQuestion.get());
-
-                req.setAttribute("game", currentGame.get());
-                Jsp.forward(req, resp, "game");
-            } else {
-                // ошибка для разработчика, не пользовательский сценарий
-                throw new RuntimeException("no such game id");
-            }
+        if (gameDTO.isPresent()){
+            req.setAttribute("game", gameDTO.get());
+            Jsp.forward(req, resp, "game");
         } else {
-            // сценарий финиша или ошибки
-            throw new RuntimeException("no such question id");
+            throw new RuntimeException("No game for game dto.");
         }
-
 
     }
 }

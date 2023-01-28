@@ -39,9 +39,14 @@ class UserRepositoryTest {
                 .role(UserRole.VISITOR)
                 .build();
         userRepository.create(billy);
-        Optional<User> getResult = userRepository.getById(billy.getId());
+        User user = userRepository.getById(billy.getId());
+        assertEquals(billy, user);
+    }
 
-        getResult.ifPresent(user -> assertEquals(billy, user));
+    @Test
+    void UserRepositoryGetByIdNull() {
+        User user = userRepository.getById(666L);
+        assertEquals(null, user);
     }
 
     @Test

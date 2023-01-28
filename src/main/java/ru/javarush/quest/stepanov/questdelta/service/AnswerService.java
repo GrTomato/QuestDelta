@@ -1,6 +1,8 @@
 package ru.javarush.quest.stepanov.questdelta.service;
 
+import ru.javarush.quest.stepanov.questdelta.dto.AnswerDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.Answer;
+import ru.javarush.quest.stepanov.questdelta.mapper.Mapper;
 import ru.javarush.quest.stepanov.questdelta.repository.AnswerRepository;
 
 import java.util.Collection;
@@ -22,12 +24,16 @@ public enum AnswerService {
         answerRepository.delete(entity);
     }
 
-    public Collection<Answer> getAll(){
+    public Collection<AnswerDTO> getAll(){
         return answerRepository
                 .getAll()
+                .map(Mapper.answer::getDTO)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .toList();
     }
-    public Optional<Answer> getById(long id){
-        return answerRepository.getById(id);
+    public Optional<AnswerDTO> getById(long id){
+        Answer answerEntity = answerRepository.getById(id);
+        return Mapper.answer.getDTO(answerEntity);
     }
 }

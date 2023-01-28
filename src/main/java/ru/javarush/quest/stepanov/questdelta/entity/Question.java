@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
@@ -11,7 +12,6 @@ import java.util.Collection;
 @Builder(builderMethodName = "with")
 public class Question extends QuestEntity {
     String text;
-
-    Collection<Answer> answers;
+    final Collection<Answer> answers = new ArrayList<>();
 
 }

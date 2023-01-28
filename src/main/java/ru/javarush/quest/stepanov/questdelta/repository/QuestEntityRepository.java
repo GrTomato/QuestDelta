@@ -29,10 +29,9 @@ public abstract class QuestEntityRepository<T extends QuestEntity> implements Re
                 .equals(fieldValue);
     }
 
-
     @Override
-    public Optional<T> getById(long id) {
-        return Optional.ofNullable(inMemoryStorage.get(id));
+    public T getById(long id) {
+        return inMemoryStorage.get(id);
     }
 
     @Override

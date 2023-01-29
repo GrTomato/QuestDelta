@@ -16,9 +16,9 @@
                 <h3> Game #${game.id} </h3>
                 <p> Quest: ${game.quest.name}</p>
                 <p> Status: ${game.gameState}</p>
-                <p> Last Question: ${game.lastRedirectedQuestion.text}</p>
                 <c:choose>
                     <c:when test="${game.gameState=='PROGRESS'}">
+                        <p> Last Question: ${game.lastRedirectedQuestion.text}</p>
                         <div class="form-group">
                             <div class="col-md-4">
                                 <a href="game?quest_id=${game.quest.id}">

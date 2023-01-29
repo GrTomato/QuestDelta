@@ -61,17 +61,20 @@ public class RepositoryLoader {
 
         Question firstQuestion = Question.with()
                 .text("You wake up in an unknown room. The head hurts and vision is blurry. Suddenly you find a glass of water. What would you do?")
+                .gameState(GameState.PROGRESS)
                 // .answers(firstQuestionAnswers)
                 .build();
         firstQuestionAnswers.forEach(firstQuestion.getAnswers()::add);
 
         Question secondQuestion = Question.with()
                 .text("You drunk the water. It was not poisoned. You feel better. The door in front of you opens and a zombie walks in. What would you do?")
+                .gameState(GameState.PROGRESS)
                 // .answers(new ArrayList<Answer>())
                 .build();
 
         Question thirdQuestion = Question.with()
                 .text("You did not drink the water. You died.")
+                .gameState(GameState.LOSE)
                 .build();
 
         firstAnswer.setNextQuestion(secondQuestion);

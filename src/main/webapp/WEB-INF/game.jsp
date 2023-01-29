@@ -44,7 +44,21 @@
         </c:when>
     </c:choose>
     <hr>
+</div>
 
+<c:choose>
+    <c:when test="${requestScope.game.gameState!='PROGRESS'}">
+        <div class="container">
+            <a href="/">
+                <button id="menuButton" name="backToMenu" class="btn btn-primary">Back To Quests</button>
+            </a>
+        </div>
+    </c:when>
+</c:choose>
+
+<br>
+
+<div class="container">
     <a href="game?quest_id=${requestScope.game.quest.id}&instruct=restart">
         <button id="restartButton" name="restart" class="btn btn-primary">Restart Quest</button>
     </a>

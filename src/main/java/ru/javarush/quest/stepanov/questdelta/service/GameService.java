@@ -26,6 +26,11 @@ public enum GameService{
     public Optional<GameDTO> updateGameProgress(Long gameId, Long newLastQuestion){
         Game currentGame = gameRepository.getById(gameId);
         currentGame.setLastRedirectedQuestion(questionRepository.getById(newLastQuestion));
+
+        if (currentGame.getLastRedirectedQuestion().getGameState() != GameState.PROGRESS){
+            currentGame.setGameState(currentGame.getLastRedirectedQuestion().getGameState());
+        }
+
         gameRepository.update(currentGame);
         return Mapper.game.getDTO(currentGame);
     }

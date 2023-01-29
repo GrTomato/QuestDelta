@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import ru.javarush.quest.stepanov.questdelta.entity.GameState;
 
 import java.util.Collection;
 
@@ -15,5 +16,6 @@ public class QuestionDTO {
 
     private Long id;
     private String text;
+    private GameState gameState;
     private Collection<AnswerDTO> answers;
 }

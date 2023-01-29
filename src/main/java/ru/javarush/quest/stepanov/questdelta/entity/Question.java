@@ -12,6 +12,7 @@ import java.util.Collection;
 @Builder(builderMethodName = "with")
 public class Question extends QuestEntity {
     String text;
+    GameState gameState;
     final Collection<Answer> answers = new ArrayList<>();
 
 }

@@ -91,9 +91,14 @@ public enum GameService{
         gameRepository.delete(entity);
     }
 
-    public Collection<Game> getAll(){
+    public Collection<GameDTO> getAllByUser(Long userId){
+        User user = userRepository.getById(userId);
         return gameRepository
                 .getAll()
+                .filter(game -> game.getUser().equals(user))
+                .map(Mapper.game::getDTO)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .toList();
     }
     public Optional<GameDTO> getById(long id){

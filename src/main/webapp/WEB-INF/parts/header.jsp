@@ -19,7 +19,7 @@
                 <li><a href="/quests" class="nav-link px-2 link-secondary">Quests</a></li>
                 <c:choose>
                     <c:when test="${sessionScope.user.role!='VISITOR'}">
-                    <li><a href="#" class="nav-link px-2 link-dark">Games</a></li>
+                    <li><a href="/games" class="nav-link px-2 link-dark">Games</a></li>
                     <li><a href="#" class="nav-link px-2 link-dark">Statistics</a></li>
                     <li><a href="#" class="nav-link px-2 link-dark">Players</a></li>
                     </c:when>

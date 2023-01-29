@@ -4,7 +4,6 @@ import jakarta.servlet.http.HttpSession;
 import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.User;
 import ru.javarush.quest.stepanov.questdelta.entity.UserRole;
-import ru.javarush.quest.stepanov.questdelta.exception.NoUserFoundException;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
 import ru.javarush.quest.stepanov.questdelta.mapper.Mapper;
 import ru.javarush.quest.stepanov.questdelta.repository.UserRepository;
@@ -53,39 +52,33 @@ public enum UserService {
 
     public Optional<UserDTO> getUser(FormData formData){
         User parsedUser = Mapper.user.parse(formData);
-        Optional<User> foundUser = this.checkUserByLogin(parsedUser.getLogin()); // login should be unique
-
-        if (foundUser.isPresent()){
-            return Mapper.user.getDTO(foundUser.get());
-        } else {
-            throw new NoUserFoundException();
-        }
+        User foundUser = this.getUserByLogin(parsedUser.getLogin()); // login should be unique
+        return Mapper.user.getDTO(foundUser);
     }
 
-    private Optional<User> checkUserByLogin(String login) {
-        if (!login.isEmpty() && !login.isBlank()){
-            User searchUser = User.with()
-                    .login(login)
-                    .build();
+    private User getUserByLogin(String login) {
 
-            return userRepository
-                    .find(searchUser)
-                    .findFirst();
-        } else {
-            return Optional.empty();
-        }
+        User searchUser = User.with()
+                .login(login)
+                .build();
+
+        Optional<User> foundUser = userRepository
+                .find(searchUser)
+                .findFirst();
+
+        return foundUser.orElse(null);
     }
 
     public UserDTO getVisitorUser(){
         return this.visitorUser;
     }
 
-    public UserDTO getUser(HttpSession session){
+    public Optional<UserDTO> getUser(HttpSession session){
         Object user = SessionParser.getSessionUser(session);
         try{
-            return (UserDTO) user;
+            return Optional.ofNullable( (UserDTO) user);
         } catch (ClassCastException e){
-            throw new RuntimeException("Can not cast session attribute 'user' to UserDTO. This attribute should store something else.");
+            return Optional.empty();
         }
     }
 }

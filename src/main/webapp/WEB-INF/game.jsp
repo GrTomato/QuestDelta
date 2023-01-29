@@ -12,7 +12,7 @@
     <c:choose>
         <c:when test="${!empty requestScope.game.lastRedirectedQuestion.answers}">
             <div class="container">
-                <form class="form-horizontal" action="game?id=${requestScope.game.id}" method="post">
+                <form class="form-horizontal" action="game?id=${requestScope.game.id}&quest_id=${requestScope.game.quest.id}" method="post">
                     <fieldset>
                         <!-- Form Name -->
                         <legend>Select your Answer</legend>

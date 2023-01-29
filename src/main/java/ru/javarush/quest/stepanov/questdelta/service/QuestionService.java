@@ -8,7 +8,6 @@ import ru.javarush.quest.stepanov.questdelta.repository.QuestionRepository;
 
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public enum QuestionService {
     INSTANCE;

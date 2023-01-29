@@ -23,62 +23,49 @@ public enum GameService{
     private GameService() {}
 
 
-    public Optional<GameDTO> updateGameProgress(FormData formData){
-        Question nextQuestion = Mapper.question.parse(formData);
-        Optional<Question> findQuestion = questionRepository.find(nextQuestion).findFirst();
-        if (findQuestion.isPresent()){
-            Game currentGame = Mapper.game.parse(formData);
-            Optional<Game> currentGameEntity = gameRepository.find(currentGame).findFirst();
-
-            if (currentGameEntity.isPresent()){
-                Game game = currentGameEntity.get();
-                game.setLastRedirectedQuestion(findQuestion.get());
-                gameRepository.update(game);
-                return Mapper.game.getDTO(game);
-            } else {
-                throw new RuntimeException("No mathces for current game was found, please investigate this bug.");
-            }
-
-        } else {
-            throw new RuntimeException("No mathces for next question was found. Please, investigate.");
-        }
+    public Optional<GameDTO> updateGameProgress(Long gameId, Long newLastQuestion){
+        Game currentGame = gameRepository.getById(gameId);
+        currentGame.setLastRedirectedQuestion(questionRepository.getById(newLastQuestion));
+        gameRepository.update(currentGame);
+        return Mapper.game.getDTO(currentGame);
     }
 
     private boolean restartGame(FormData formData){
         return formData.getParameter("instruct") != null && formData.getParameter("instruct").equalsIgnoreCase("restart");
     }
 
-    private Game resetGameProgress(Game currentGame){
+    private Game restartGameProgress(Game currentGame){
         Question startQuestion = currentGame.getQuest().getStartQuestion();
         currentGame.setLastRedirectedQuestion(startQuestion);
         gameRepository.update(currentGame);
         return currentGame;
     }
-    public Optional<GameDTO> getGame(FormData formData, Long userId) {
+    public Optional<GameDTO> getGame(FormData formData, Long userId, Long questId) {
 
-        Quest questParsed = Mapper.quest.parse(formData);
-        Quest existingQuest = questRepository.getById(questParsed.getId());
+        Quest existingQuest = questRepository.getById(questId);
+        User gameUser = userRepository.getById(userId);
+
         Game parsedGame = Mapper.game.parse(formData);
         parsedGame.setQuest(existingQuest);
-        User gameUser = userRepository.getById(userId);
         parsedGame.setUser(gameUser);
         parsedGame.setGameState(GameState.PROGRESS);
 
         Optional<Game> foundGame = gameRepository.find(parsedGame).findFirst();
+
         if (foundGame.isPresent()){
-            if (this.restartGame(formData)){
+            if (restartGame(formData)){
                 return Mapper.game.getDTO(
-                        this.resetGameProgress(foundGame.get()));
+                        restartGameProgress(foundGame.get())
+                );
             } else {
                 return Mapper.game.getDTO(foundGame.get());
             }
         } else {
-            Game newGame = createNewGame(existingQuest.getId(), userId);
-            return Mapper.game.getDTO(newGame);
+            return Optional.empty();
         }
     }
 
-    private Game createNewGame(Long questId, Long userId){
+    public Optional<GameDTO> createNewGame(Long questId, Long userId){
 
         Quest quest = questRepository.getById(questId);
         User user = userRepository.getById(userId);
@@ -90,7 +77,7 @@ public enum GameService{
                 .lastRedirectedQuestion(quest.getStartQuestion())
                 .build();
         gameRepository.create(newGame);
-        return newGame;
+        return Mapper.game.getDTO(newGame);
     }
 
     public void create(Game entity){

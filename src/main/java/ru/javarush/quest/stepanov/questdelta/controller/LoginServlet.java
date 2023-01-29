@@ -6,11 +6,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
-import ru.javarush.quest.stepanov.questdelta.exception.NoUserFoundException;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
 import ru.javarush.quest.stepanov.questdelta.service.UserService;
 import ru.javarush.quest.stepanov.questdelta.util.Jsp;
 import ru.javarush.quest.stepanov.questdelta.util.MessageContainer;
+import ru.javarush.quest.stepanov.questdelta.util.SessionParser;
 import ru.javarush.quest.stepanov.questdelta.util.URLContainer;
 
 import java.io.IOException;
@@ -30,19 +30,13 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         FormData formData = FormData.of(req);
-        
-        try {
-            Optional<UserDTO> user = userService.getUser(formData);
-            if (user.isPresent()){
-                req.getSession().setAttribute("user", user.get());
-                Jsp.redirect(resp, "/");
-            } else {
-                throw new NoUserFoundException();
-            }
-        } catch (NoUserFoundException e){
+        Optional<UserDTO> user = userService.getUser(formData);
+        if (user.isPresent()){
+            SessionParser.setSessionUser(req.getSession(), user.get());
+            Jsp.redirect(resp, "/");
+        } else {
             req.setAttribute("message", MessageContainer.USER_NOT_FOUND);
             Jsp.forward(req, resp, "login");
         }
-
     }
 }

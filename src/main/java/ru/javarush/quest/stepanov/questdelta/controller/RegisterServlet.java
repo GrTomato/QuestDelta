@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
-import ru.javarush.quest.stepanov.questdelta.exception.NoUserFoundException;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
 import ru.javarush.quest.stepanov.questdelta.service.UserService;
 import ru.javarush.quest.stepanov.questdelta.util.Jsp;
@@ -30,23 +29,19 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         FormData formData = FormData.of(req);
+        Optional<UserDTO> foundUser = userService.getUser(formData);
 
-        try{
-            Optional<UserDTO> foundUser = userService.getUser(formData);
-            if (foundUser.isPresent()){
-                req.setAttribute("message", MessageContainer.USER_ALREADY_REGISTERED);
-                Jsp.forward(req, resp, "register");
-            } else {
-                throw new NoUserFoundException();
-            }
-        } catch (NoUserFoundException e){
+        if (foundUser.isEmpty()){
             Optional<UserDTO> userDTO = userService.create(formData);
             if (userDTO.isPresent()){
                 Jsp.redirect(resp, "/");
             } else {
-                throw new RuntimeException("Something happened while creating new user. Please, debug.");
+                req.setAttribute("message", MessageContainer.UNEXPECTED_BEHAVIOUR);
+                Jsp.forward(req, resp, "register");
             }
+        } else {
+            req.setAttribute("message", MessageContainer.USER_ALREADY_REGISTERED);
+            Jsp.forward(req, resp, "register");
         }
-
     }
 }

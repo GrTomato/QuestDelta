@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class URLContainer {
 
+    public static final String ALL = "/*";
     public static final String START = "/";
     public static final String LOGIN = "/login";
     public static final String LOGOUT = "/logout";

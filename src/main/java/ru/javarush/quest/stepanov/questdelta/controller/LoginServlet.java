@@ -5,7 +5,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
+import ru.javarush.quest.stepanov.questdelta.exception.NoValidSessionException;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
 import ru.javarush.quest.stepanov.questdelta.service.UserService;
 import ru.javarush.quest.stepanov.questdelta.util.Jsp;
@@ -32,8 +34,16 @@ public class LoginServlet extends HttpServlet {
         FormData formData = FormData.of(req);
         Optional<UserDTO> user = userService.getUser(formData);
         if (user.isPresent()){
-            SessionParser.setSessionUser(req.getSession(), user.get());
-            Jsp.redirect(resp, "/");
+            HttpSession currentSession = req.getSession(false);
+
+            if (currentSession != null){
+                currentSession.invalidate();
+
+                SessionParser.setSessionUser(req.getSession(), user.get());
+                Jsp.redirect(resp, "/");
+            } else {
+                throw new NoValidSessionException("No session to invalidate during login procedure.");
+            }
         } else {
             req.setAttribute("message", MessageContainer.USER_NOT_FOUND);
             Jsp.forward(req, resp, "login");

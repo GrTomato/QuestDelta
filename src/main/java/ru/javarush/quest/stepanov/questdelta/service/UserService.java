@@ -15,7 +15,6 @@ import java.util.Optional;
 public enum UserService {
     INSTANCE;
     private final UserRepository userRepository = UserRepository.getInstance();
-    private final UserDTO visitorUser = UserDTO.with().role(UserRole.VISITOR).build();
 
     private UserService() {}
 
@@ -69,8 +68,8 @@ public enum UserService {
         return foundUser.orElse(null);
     }
 
-    public UserDTO getVisitorUser(){
-        return this.visitorUser;
+    public static UserDTO getVisitorUser(){
+        return UserDTO.with().role(UserRole.VISITOR).build();
     }
 
     public Optional<UserDTO> getUser(HttpSession session){

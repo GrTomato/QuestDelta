@@ -6,14 +6,6 @@ import java.util.stream.Stream;
 
 public class GameRepository extends QuestEntityRepository<Game>{
 
-    private static final GameRepository INSTANCE = new GameRepository();
-
-    private GameRepository(){}
-
-    public static GameRepository getInstance(){
-        return INSTANCE;
-    }
-
     @Override
     public Stream<Game> find(Game entity) {
         return inMemoryStorage.values().stream()

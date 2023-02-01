@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import ru.javarush.quest.stepanov.questdelta.config.Winter;
 import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
 import ru.javarush.quest.stepanov.questdelta.exception.NoValidSessionException;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
@@ -21,7 +22,7 @@ import java.util.Optional;
 @WebServlet(URLContainer.LOGIN)
 public class LoginServlet extends HttpServlet {
 
-    private final UserService userService = UserService.INSTANCE;
+    private final UserService userService = Winter.getBean(UserService.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

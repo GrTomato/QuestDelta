@@ -1,5 +1,6 @@
 package ru.javarush.quest.stepanov.questdelta.service;
 
+import lombok.AllArgsConstructor;
 import ru.javarush.quest.stepanov.questdelta.dto.AnswerDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.Answer;
 import ru.javarush.quest.stepanov.questdelta.mapper.Mapper;
@@ -8,10 +9,9 @@ import ru.javarush.quest.stepanov.questdelta.repository.AnswerRepository;
 import java.util.Collection;
 import java.util.Optional;
 
-public enum AnswerService {
-
-    INSTANCE;
-    private final AnswerRepository answerRepository = AnswerRepository.getInstance();
+@AllArgsConstructor
+public class AnswerService {
+    private final AnswerRepository answerRepository;
 
     public void create(Answer entity){
         answerRepository.create(entity);

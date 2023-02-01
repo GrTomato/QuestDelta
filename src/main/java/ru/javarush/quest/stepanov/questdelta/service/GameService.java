@@ -1,5 +1,6 @@
 package ru.javarush.quest.stepanov.questdelta.service;
 
+import lombok.AllArgsConstructor;
 import ru.javarush.quest.stepanov.questdelta.dto.GameDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.*;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
@@ -12,16 +13,13 @@ import ru.javarush.quest.stepanov.questdelta.repository.UserRepository;
 import java.util.Collection;
 import java.util.Optional;
 
-public enum GameService{
+@AllArgsConstructor
+public class GameService{
 
-    INSTANCE;
-    private final GameRepository gameRepository = GameRepository.getInstance();
-    private final UserRepository userRepository = UserRepository.getInstance();
-    private final QuestRepository questRepository = QuestRepository.getInstance();
-    private final QuestionRepository questionRepository = QuestionRepository.getInstance();
-
-    private GameService() {}
-
+    private final GameRepository gameRepository;
+    private final UserRepository userRepository;
+    private final QuestRepository questRepository;
+    private final QuestionRepository questionRepository;
 
     public Optional<GameDTO> updateGameProgress(Long gameId, Long newLastQuestion){
         Game currentGame = gameRepository.getById(gameId);

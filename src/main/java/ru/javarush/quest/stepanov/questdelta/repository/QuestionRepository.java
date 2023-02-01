@@ -6,15 +6,6 @@ import java.util.stream.Stream;
 
 public class QuestionRepository extends QuestEntityRepository<Question>{
 
-    private static final QuestionRepository INSTANCE = new QuestionRepository();
-
-    private QuestionRepository(){}
-
-    public static QuestionRepository getInstance(){
-        return INSTANCE;
-    }
-
-
     @Override
     public Stream<Question> find(Question entity) {
         return inMemoryStorage.values().stream()

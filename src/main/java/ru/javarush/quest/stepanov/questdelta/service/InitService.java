@@ -1,6 +1,6 @@
-package ru.javarush.quest.stepanov.questdelta.util;
+package ru.javarush.quest.stepanov.questdelta.service;
 
-import lombok.experimental.UtilityClass;
+import lombok.AllArgsConstructor;
 import ru.javarush.quest.stepanov.questdelta.entity.*;
 import ru.javarush.quest.stepanov.questdelta.repository.AnswerRepository;
 import ru.javarush.quest.stepanov.questdelta.repository.QuestRepository;
@@ -10,19 +10,19 @@ import ru.javarush.quest.stepanov.questdelta.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-@UtilityClass
-public class RepositoryLoader {
+@AllArgsConstructor
+public class InitService {
 
-    private final UserRepository userRepository = UserRepository.getInstance();
-    private final QuestRepository questRepository = QuestRepository.getInstance();
-    private final QuestionRepository questionRepository = QuestionRepository.getInstance();
-    private final AnswerRepository answerRepository = AnswerRepository.getInstance();
+    private final UserRepository userRepository;
+    private final QuestRepository questRepository;
+    private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository ;
 
-    public static void load(){
-        loadDefaultData();
+    public void load(){
+        this.loadDefaultData();
     }
 
-    private static void loadDefaultData(){
+    private void loadDefaultData(){
 
         userRepository.create(
                 User.with()
@@ -105,6 +105,5 @@ public class RepositoryLoader {
         );
 
     }
-
 
 }

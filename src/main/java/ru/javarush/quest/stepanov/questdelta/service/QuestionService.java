@@ -1,5 +1,6 @@
 package ru.javarush.quest.stepanov.questdelta.service;
 
+import lombok.AllArgsConstructor;
 import ru.javarush.quest.stepanov.questdelta.dto.QuestionDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.Question;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
@@ -9,11 +10,9 @@ import ru.javarush.quest.stepanov.questdelta.repository.QuestionRepository;
 import java.util.Collection;
 import java.util.Optional;
 
-public enum QuestionService {
-    INSTANCE;
-    private final QuestionRepository questionRepository = QuestionRepository.getInstance();
-
-    private QuestionService() {}
+@AllArgsConstructor
+public class QuestionService {
+    private final QuestionRepository questionRepository;
 
     public void create(Question entity){
         questionRepository.create(entity);

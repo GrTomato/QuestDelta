@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.javarush.quest.stepanov.questdelta.config.Winter;
 import ru.javarush.quest.stepanov.questdelta.dto.GameDTO;
 import ru.javarush.quest.stepanov.questdelta.dto.QuestDTO;
 import ru.javarush.quest.stepanov.questdelta.dto.QuestionDTO;
@@ -27,10 +28,10 @@ import java.util.Optional;
 @WebServlet(URLContainer.GAME)
 public class GameServlet extends HttpServlet {
 
-    private final GameService gameService = GameService.INSTANCE;
-    private final UserService userService = UserService.INSTANCE;
-    private final QuestionService questionService = QuestionService.INSTANCE;
-    private final QuestService questService = QuestService.INSTANCE;
+    private final GameService gameService = Winter.getBean(GameService.class);
+    private final UserService userService = Winter.getBean(UserService.class);
+    private final QuestionService questionService = Winter.getBean(QuestionService.class);
+    private final QuestService questService = Winter.getBean(QuestService.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

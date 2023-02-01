@@ -1,5 +1,6 @@
 package ru.javarush.quest.stepanov.questdelta.service;
 
+import lombok.AllArgsConstructor;
 import ru.javarush.quest.stepanov.questdelta.dto.QuestDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.Quest;
 import ru.javarush.quest.stepanov.questdelta.mapper.FormData;
@@ -9,12 +10,9 @@ import ru.javarush.quest.stepanov.questdelta.repository.QuestRepository;
 import java.util.Collection;
 import java.util.Optional;
 
-public enum QuestService {
-    INSTANCE;
-    private final QuestRepository questRepository = QuestRepository.getInstance();
-
-    private QuestService() {}
-
+@AllArgsConstructor
+public class QuestService {
+    private final QuestRepository questRepository;
     public void create(Quest entity){
         questRepository.create(entity);
     }

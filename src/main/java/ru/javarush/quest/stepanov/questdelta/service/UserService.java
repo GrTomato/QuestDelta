@@ -1,6 +1,7 @@
 package ru.javarush.quest.stepanov.questdelta.service;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.AllArgsConstructor;
 import ru.javarush.quest.stepanov.questdelta.dto.UserDTO;
 import ru.javarush.quest.stepanov.questdelta.entity.User;
 import ru.javarush.quest.stepanov.questdelta.entity.UserRole;
@@ -12,11 +13,9 @@ import ru.javarush.quest.stepanov.questdelta.util.SessionParser;
 import java.util.Collection;
 import java.util.Optional;
 
-public enum UserService {
-    INSTANCE;
-    private final UserRepository userRepository = UserRepository.getInstance();
-
-    private UserService() {}
+@AllArgsConstructor
+public class UserService {
+    private final UserRepository userRepository;
 
     public void create(User entity){
         userRepository.create(entity);

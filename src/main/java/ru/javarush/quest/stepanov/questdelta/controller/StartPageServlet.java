@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.javarush.quest.stepanov.questdelta.config.Winter;
 import ru.javarush.quest.stepanov.questdelta.dto.QuestDTO;
 import ru.javarush.quest.stepanov.questdelta.service.QuestService;
 import ru.javarush.quest.stepanov.questdelta.util.Jsp;
@@ -16,7 +17,7 @@ import java.util.Collection;
 @WebServlet(URLContainer.START)
 public class StartPageServlet extends HttpServlet {
 
-    private QuestService questService = QuestService.INSTANCE;
+    private QuestService questService = Winter.getBean(QuestService.class);
 
     @Override
     public void init() throws ServletException {

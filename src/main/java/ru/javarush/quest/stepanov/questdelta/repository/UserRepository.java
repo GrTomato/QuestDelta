@@ -6,14 +6,6 @@ import java.util.stream.Stream;
 
 public class UserRepository extends QuestEntityRepository<User> {
 
-    private static final UserRepository INSTANCE = new UserRepository();
-
-    private UserRepository(){}
-
-    public static UserRepository getInstance(){
-        return INSTANCE;
-    }
-
     @Override
     public Stream<User> find(User searchUser) {
         return inMemoryStorage.values().stream()

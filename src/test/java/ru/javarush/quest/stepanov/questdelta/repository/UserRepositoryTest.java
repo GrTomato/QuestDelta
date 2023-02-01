@@ -2,6 +2,7 @@ package ru.javarush.quest.stepanov.questdelta.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.javarush.quest.stepanov.questdelta.config.Winter;
 import ru.javarush.quest.stepanov.questdelta.entity.User;
 import ru.javarush.quest.stepanov.questdelta.entity.UserRole;
 
@@ -10,7 +11,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 class UserRepositoryTest {
 
-    private UserRepository userRepository = UserRepository.getInstance();
+    private UserRepository userRepository = Winter.getBean(UserRepository.class);
 
     @BeforeEach
     void setUp() {

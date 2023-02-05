@@ -40,9 +40,9 @@ public class QuestionService {
 
     public Optional<QuestionDTO> getQuestion(FormData formData){
         Question parsedQuestion = Mapper.question.parse(formData);
-        Optional<Question> question = questionRepository.find(parsedQuestion).findFirst();
-        return question.isPresent()
-                ? Mapper.question.getDTO(question.get())
+        Question question = questionRepository.getById(parsedQuestion.getId());
+        return question != null
+                ? Mapper.question.getDTO(question)
                 : Optional.empty();
     }
 }

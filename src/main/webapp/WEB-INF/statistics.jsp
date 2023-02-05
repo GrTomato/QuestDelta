@@ -10,6 +10,7 @@
   <table class="table">
     <thead>
     <tr>
+      <th scope="col">#</th>
       <th scope="col">Metrics</th>
       <th scope="col">Metric Value</th>
     </tr>

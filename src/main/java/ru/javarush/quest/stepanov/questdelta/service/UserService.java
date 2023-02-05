@@ -36,9 +36,8 @@ public class UserService {
                 .map(Optional::get)
                 .toList();
     }
-    public Optional<UserDTO> getById(long id){
-        User userEntity = userRepository.getById(id);
-        return Mapper.user.getDTO(userEntity);
+    private User getById(long id){
+        return userRepository.getById(id);
     }
 
     public Optional<UserDTO> create(FormData formData){
@@ -78,5 +77,27 @@ public class UserService {
         } catch (ClassCastException e){
             return Optional.empty();
         }
+    }
+
+    public void setUser(HttpSession session, UserDTO userDTO){
+        SessionParser.setSessionUser(session, userDTO);
+    }
+
+    public Optional<UserDTO> updateById(Long userId, FormData formData){
+        User userById = this.getById(userId);
+        User parsedUser = Mapper.user.parse(formData);
+
+        if (userById != null){
+            userById.setPassword(parsedUser.getPassword());
+            userById.setRole(parsedUser.getRole());
+            userById.setEmail(parsedUser.getEmail());
+
+            userRepository.update(userById);
+            return Mapper.user.getDTO(userById);
+        } else {
+            return Optional.empty();
+        }
+
+
     }
 }

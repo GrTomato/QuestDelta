@@ -21,7 +21,7 @@
                     <c:when test="${sessionScope.user.role!='VISITOR'}">
                     <li><a href="/games" class="nav-link px-2 link-dark">Games</a></li>
                     <li><a href="/stats" class="nav-link px-2 link-dark">Statistics</a></li>
-                    <li><a href="#" class="nav-link px-2 link-dark">Edit Profile</a></li>
+                    <li><a href="/profile" class="nav-link px-2 link-dark">Profile</a></li>
                     </c:when>
                 </c:choose>
             </ul>
